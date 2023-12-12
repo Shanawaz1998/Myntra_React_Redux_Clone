@@ -1,17 +1,33 @@
 import React from "react";
+import { useSelector } from "react-redux";
 
 export default function BagSummary() {
+  const bagItems = useSelector((bag) => bag.bag);
+  const items = useSelector((item) => item.items);
+  const cartItems = items.filter((item) => {
+    const itemFound = bagItems.indexOf(item.id);
+    return itemFound >= 0;
+  });
+  console.log("cartItems", cartItems);
+
   const summary = {
-    totalItem: 3,
-    totalMRP: 2345,
-    totalDiscount: 999,
-    finalPayment: 1346,
+    totalItem: cartItems.length,
+    totalMRP: 0,
+    totalDiscount: 0,
+    finalPayment: 0,
   };
+
+  cartItems.forEach((element) => {
+    summary.totalMRP += element.original_price;
+    summary.totalDiscount += element.original_price - element.current_price;
+    summary.finalPayment = summary.totalMRP - summary.totalDiscount + 99;
+  });
+
   return (
     <div className="bag-summary">
       <div className="bag-details-container">
         <div className="price-header">
-          PRICE DETAILS (${summary.totalItem} Items)
+          PRICE DETAILS ({summary.totalItem} Items)
         </div>
         <div className="price-item">
           <span className="price-item-tag">Total MRP</span>

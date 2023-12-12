@@ -1,6 +1,16 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { bagAction } from "../Store/BagSlice";
+import { TiDeleteOutline } from "react-icons/ti";
 
 export default function BagItem({ item }) {
+  const dispatch = useDispatch();
+
+  const handleRemoveItem = () => {
+    console.log("remo clicked");
+    dispatch(bagAction.removeFromBag(item.id));
+  };
+
   return (
     <div className="bag-item-container">
       <div className="item-left-part">
@@ -26,11 +36,8 @@ export default function BagItem({ item }) {
         </div>
       </div>
 
-      <div
-        className="remove-from-cart"
-        onClick={() => console.log("Item removed")}
-      >
-        X
+      <div className="remove-from-cart" onClick={handleRemoveItem}>
+        <TiDeleteOutline />
       </div>
     </div>
   );

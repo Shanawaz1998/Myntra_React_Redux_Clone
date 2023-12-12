@@ -2,9 +2,13 @@ import React from "react";
 import { FaFaceGrinHearts } from "react-icons/fa6";
 import { IoPersonSharp } from "react-icons/io5";
 import { IoBag } from "react-icons/io5";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Headers() {
+  const bagStatus = useSelector((store) => store.bag);
+  console.log(bagStatus.length, "header");
+
   return (
     <header>
       <div className="logo_container">
@@ -47,7 +51,7 @@ export default function Headers() {
         <Link className="action_container" to="/bag">
           <IoBag />
           <span className="action_name">Bag</span>
-          <span className="bag-item-count">0</span>
+          <span className="bag-item-count">{bagStatus.length}</span>
         </Link>
       </div>
     </header>

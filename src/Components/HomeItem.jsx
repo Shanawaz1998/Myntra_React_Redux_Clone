@@ -1,19 +1,25 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { bagAction } from "../Store/BagSlice";
+import { MdAddTask } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+import { IoLogoFacebook } from "react-icons/io5";
 
 export default function HomeItem({ item }) {
-  // id: "001",
-  //   image: "images/1.jpg",
-  //   company: "Carlton London",
-  //   item_name: "Rhodium-Plated CZ Floral Studs",
-  //   original_price: 1045,
-  //   current_price: 606,
-  //   discount_percentage: 42,
-  //   return_period: 14,
-  //   delivery_date: "10 Oct 2023",
-  //   rating: {
-  //     stars: 4.5,
-  //     count: 1400,
-  //   },
+  const dispatch = useDispatch();
+  const bagStatus = useSelector((store) => store.bag);
+  const handleAddToBag = (id) => {
+    dispatch(bagAction.addToBag(id));
+    const newId = bagStatus.filter((itemId) => itemId !== id);
+  };
+
+  console.log("bag", bagStatus);
+
+  const handleRemoveFromBag = (id) => {
+    console.log("remove", id);
+    dispatch(bagAction.removeFromBag(id));
+  };
+
   return (
     <div className="item-container">
       <img className="item-image" src={item.image} alt="item image" />
@@ -27,12 +33,19 @@ export default function HomeItem({ item }) {
         <span className="original-price">Rs {item.original_price}</span>
         <span className="discount">({item.discount_percentage}% OFF)</span>
       </div>
-      <button
-        className="btn-add-bag"
-        // onclick={() => console.log("Add to bag clicked")}
-      >
-        Add to Bag
-      </button>
+      {bagStatus.includes(item.id) ? (
+        <button
+          className="btn-add-bag btn btn-danger"
+          onClick={() => handleRemoveFromBag(item.id)}
+        >
+          <MdDelete />
+          Remove
+        </button>
+      ) : (
+        <button className="btn-add-bag" onClick={() => handleAddToBag(item.id)}>
+          <MdAddTask /> Add to Bag
+        </button>
+      )}
     </div>
   );
 }
